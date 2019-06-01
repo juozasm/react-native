@@ -76,9 +76,9 @@ export default class App extends React.Component {
             </TouchableOpacity>
         </View>
         <View style={styles.photoContainer}>
-          {elements.filter((Item, i)=>
-            Math.ceil((i + 1) / 12) >= pageNumber && Math.ceil((i + 1) / 12) < pageNumber + 1 &&<Item key={i}/>
-          )}
+          {
+            elements.splice((pageNumber - 1) * 12, pageNumber * 12)
+          }
         </View>
         <Text style={{
           color:"white"
