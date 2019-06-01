@@ -1,12 +1,16 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView   } from 'react-native';
-import LeftArr from './assets/left.png'
-import RightArr from './assets/right.png'
+import LeftArr from './assets/left.png';
+import RightArr from './assets/right.png';
+//import axios from 'axios';
 
+//http://placekitten.com/200/300
 export default class App extends React.Component {
   state = {
+    imageView: false,
+    currentImageIndex:0,
     pageNumber:1,
-    images: Array(48).fill(),
+    images: [],
     totalPages: 0
   }
 
@@ -28,33 +32,73 @@ export default class App extends React.Component {
     
   }
 
-  componentDidMount(){
-    this.setState({
-      totalPages:  Math.ceil(this.state.images.length / 12)
+  getChuckNorrisJoke = () =>{
+    return 'Joke'
+  }
+
+  getRandomImages = () =>{
+    return Array(48).fill().map(_=>{
+      const w = Math.ceil(((Math.random() + 1) *  200))
+      return {image: `http://placekitten.com/${w}/${w}`, text:this.getChuckNorrisJoke()}
     })
+  }
+
+  getCurrentImage = (i) =>{
+    this.setState({
+      imageView: true,
+      currentImageIndex:i,
+    })    
+  }
+
+  componentDidMount(){
+    const images = this.getRandomImages()
+    this.setState({
+      images,
+      totalPages:  Math.ceil(images.length / 12)
+    })
+
+
+  //   axios.get('http://placekitten.com/')
+  // .then(function (response) {
+  //   // handle success
+  //   console.log(response);
+  // })
+  // .catch(function (error) {
+  //   // handle error
+  //   console.log(error);
+  // })
   }
 
   render() {
 
-    const { pageNumber, images, totalPages } = this.state
+    const { pageNumber, images, totalPages, imageView, currentImageIndex, } = this.state
     const colors = [
       '#ff0000',
       '#00ff00',
       '#0000ff',
       'cyan',
     ]
-    const elements = images.map((item, i, arr)=>
-    <Image
-      key={i}
-      style={{
-        width: `${100 / 3}%`, 
-        height: `${100 / 4}%`,
-        borderColor:colors[Math.floor(i / 12)],
-        borderWidth:2
-      }}
-      source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}}
+    //.filter((images, i)=>!imageView || currentImageIndex === i )
+    const elements = images.map((source, i)=>
+    <TouchableOpacity
+        key={i}
+        onPress={()=>this.getCurrentImage(i)} 
+        style={{
+          width: imageView?`100%`:`${100 / 3}%`, 
+          height: imageView?'100%':`${100 / 4}%`,
+          display:currentImageIndex === i ? 'flex' : imageView ? 'none' : 'flex',
+        }} >
+      <Image
+        style={{
+          width: '100%',
+          height: '100%',
+          //borderColor:colors[Math.floor(i / 12)],
+          //borderWidth:2
+        }}
+        source={{uri: source.image}}
 
-    />
+      />
+    </TouchableOpacity>
     )
     return (
       <ScrollView contentContainerStyle={styles.container}>
@@ -79,10 +123,11 @@ export default class App extends React.Component {
           {
             elements.splice((pageNumber - 1) * 12, pageNumber * 12)
           }
+          
         </View>
         <Text style={{
           color:"white"
-        }}>{totalPages}</Text>
+        }}>{pageNumber}/{totalPages}</Text>
       </ScrollView>
     );
   }
