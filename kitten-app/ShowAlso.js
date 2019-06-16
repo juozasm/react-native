@@ -3,9 +3,9 @@ import React from 'react'
 function componentName(props) {
     return (
         <>
-        {props.kazkas}
-          {props.text}  
-          {props.number}
+            {props.prefix}
+            {props.text}  
+            {props.number}
         </>
     )
 }
