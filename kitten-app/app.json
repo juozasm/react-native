@@ -22,6 +22,9 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "android": {
+      "package": "com.kitten.app"
+    },
     "ios": {
       "supportsTablet": true
     }

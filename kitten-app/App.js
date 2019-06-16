@@ -3,7 +3,9 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, ActivityIn
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 import LeftArr from './assets/left.png';
 import RightArr from './assets/right.png';
+import Show from './Show'
 import axios from 'axios';
+import ShowAlso from './ShowAlso'
 
 export default class App extends React.Component {
   state = {
@@ -240,6 +242,11 @@ export default class App extends React.Component {
           <Text style={{
             color:"white"
           }}>
+            <Show>
+              {
+                (prefix)=><ShowAlso prefix={prefix} text={'kittenapp.com '} number={2019}/>
+              }
+            </Show>
             {pageNumber}/{totalPages}
           </Text>
         </View>
